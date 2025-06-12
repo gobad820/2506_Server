@@ -40,7 +40,9 @@ public class AdminController {
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdDate,
         @RequestParam(required = false) State state) {
         validateParameters(page, size);
-        checkUserIdNegative(userId);
+        if (userId != null) {
+            checkUserIdNegative(userId);
+        }
         validateDate(createdDate);
         Page<User> users = adminService.getUsersInfo(page, size, name, userId, createdDate, state);
         return new BaseResponse<>(users);
