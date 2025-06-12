@@ -34,6 +34,11 @@ public enum BaseResponseStatus {
     INVALID_USER_JWT(false,HttpStatus.FORBIDDEN.value(),"권한이 없는 유저의 접근입니다."),
     NOT_FIND_USER(false,HttpStatus.NOT_FOUND.value(),"일치하는 유저가 없습니다."),
     INVALID_OAUTH_TYPE(false, HttpStatus.BAD_REQUEST.value(), "알 수 없는 소셜 로그인 형식입니다."),
+    INVALID_ID(false,HttpStatus.BAD_REQUEST.value(),"유효하지 않는 ID입니다."),
+    INVALID_STATE(false,HttpStatus.BAD_REQUEST.value(),"유효하지 않는 State입니다."),
+    INVALID_PAGE(false,HttpStatus.BAD_REQUEST.value(),"유효하지 않는 페이지입니다."),
+    INVALID_PAGE_SIZE(false,HttpStatus.BAD_REQUEST.value(), "유효하지 않는 페이지 크기입니다."),
+    INVALID_DATE(false,HttpStatus.BAD_REQUEST.value(),"가입일은 오늘을 포함한 이전으로 설정해야 합니다."),
 
 
 

@@ -5,6 +5,7 @@ import com.example.demo.common.response.BaseResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 
 @Slf4j
@@ -16,6 +17,18 @@ public class ExceptionAdvice {
         log.warn("BaseException. error message: {}", exception.getMessage());
         return new BaseResponse<>(exception.getStatus());
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public BaseResponse<BaseResponseStatus> handleTypeMismatch(
+        MethodArgumentTypeMismatchException exception) {
+        log.warn("Type conversion error: {}", exception.getMessage());
+
+        if (exception.getRequiredType() != null && exception.getRequiredType().isEnum()) {
+            return new BaseResponse<>(BaseResponseStatus.INVALID_STATE);
+        }
+        return new BaseResponse<>(BaseResponseStatus.INVALID_ID);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public BaseResponse<BaseResponseStatus> ExceptionHandle(Exception exception) {

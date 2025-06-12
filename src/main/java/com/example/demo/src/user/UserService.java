@@ -1,23 +1,28 @@
 package com.example.demo.src.user;
 
 
+import static com.example.demo.common.entity.BaseEntity.State.ACTIVE;
+import static com.example.demo.common.response.BaseResponseStatus.FAILED_TO_LOGIN;
+import static com.example.demo.common.response.BaseResponseStatus.NOT_FIND_USER;
+import static com.example.demo.common.response.BaseResponseStatus.PASSWORD_ENCRYPTION_ERROR;
+import static com.example.demo.common.response.BaseResponseStatus.POST_USERS_EXISTS_EMAIL;
 
-import com.example.demo.common.entity.BaseEntity.State;
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.src.user.entity.User;
-import com.example.demo.src.user.model.*;
+import com.example.demo.src.user.model.GetUserRes;
+import com.example.demo.src.user.model.PatchUserReq;
+import com.example.demo.src.user.model.PostLoginReq;
+import com.example.demo.src.user.model.PostLoginRes;
+import com.example.demo.src.user.model.PostUserReq;
+import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.example.demo.common.entity.BaseEntity.State.ACTIVE;
-import static com.example.demo.common.response.BaseResponseStatus.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 // Service Create, Update, Delete 의 로직 처리
 @Transactional

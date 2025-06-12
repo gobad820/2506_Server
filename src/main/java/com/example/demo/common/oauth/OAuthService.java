@@ -1,18 +1,21 @@
 package com.example.demo.common.oauth;
 
+import static com.example.demo.common.response.BaseResponseStatus.INVALID_OAUTH_TYPE;
+
 import com.example.demo.common.Constant;
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.src.user.UserService;
-import com.example.demo.src.user.model.*;
+import com.example.demo.src.user.model.GetSocialOAuthRes;
+import com.example.demo.src.user.model.GetUserRes;
+import com.example.demo.src.user.model.GoogleOAuthToken;
+import com.example.demo.src.user.model.GoogleUser;
+import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.utils.JwtService;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import static com.example.demo.common.response.BaseResponseStatus.INVALID_OAUTH_TYPE;
 
 @Service
 @RequiredArgsConstructor

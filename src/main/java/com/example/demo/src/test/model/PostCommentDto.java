@@ -2,12 +2,11 @@ package com.example.demo.src.test.model;
 
 import com.example.demo.src.test.entity.Comment;
 import com.example.demo.src.test.entity.Memo;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter

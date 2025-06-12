@@ -1,21 +1,20 @@
 package com.example.demo.utils;
 
 
+import static com.example.demo.common.response.BaseResponseStatus.EMPTY_JWT;
+import static com.example.demo.common.response.BaseResponseStatus.INVALID_JWT;
+
 import com.example.demo.common.exceptions.BaseException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-
-import static com.example.demo.common.response.BaseResponseStatus.EMPTY_JWT;
-import static com.example.demo.common.response.BaseResponseStatus.INVALID_JWT;
 
 @Service
 public class JwtService {

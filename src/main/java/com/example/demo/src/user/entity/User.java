@@ -1,9 +1,17 @@
 package com.example.demo.src.user.entity;
 
 import com.example.demo.common.entity.BaseEntity;
-import lombok.*;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
@@ -45,5 +53,8 @@ public class User extends BaseEntity {
     public void deleteUser() {
         this.state = State.INACTIVE;
     }
+
+    public void updateState(State state){this.state = state;}
+
 
 }

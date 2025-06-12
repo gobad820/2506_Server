@@ -1,17 +1,10 @@
 package com.example.demo.src.test;
 
 import com.example.demo.src.test.entity.Memo;
-import com.example.demo.src.test.model.GetMemoDto;
-import com.example.demo.src.test.model.MemoDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.query.JpaQueryMethodFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import javax.sql.DataSource;
 import java.util.List;
+import javax.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository

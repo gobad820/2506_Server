@@ -1,22 +1,36 @@
 package com.example.demo.src.user;
 
 
-import com.example.demo.common.Constant.SocialLoginType;
-import com.example.demo.common.oauth.OAuthService;
-import com.example.demo.utils.JwtService;
-import lombok.RequiredArgsConstructor;
-import com.example.demo.common.exceptions.BaseException;
-import com.example.demo.common.response.BaseResponse;
-import com.example.demo.src.user.model.*;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import static com.example.demo.common.response.BaseResponseStatus.POST_USERS_INVALID_EMAIL;
+import static com.example.demo.common.response.BaseResponseStatus.USERS_EMPTY_EMAIL;
+import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
+import com.example.demo.common.Constant.SocialLoginType;
+import com.example.demo.common.exceptions.BaseException;
+import com.example.demo.common.oauth.OAuthService;
+import com.example.demo.common.response.BaseResponse;
+import com.example.demo.src.user.model.GetSocialOAuthRes;
+import com.example.demo.src.user.model.GetUserRes;
+import com.example.demo.src.user.model.PatchUserReq;
+import com.example.demo.src.user.model.PostLoginReq;
+import com.example.demo.src.user.model.PostLoginRes;
+import com.example.demo.src.user.model.PostUserReq;
+import com.example.demo.src.user.model.PostUserRes;
+import com.example.demo.utils.JwtService;
 import java.io.IOException;
 import java.util.List;
-
-
-import static com.example.demo.common.response.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
