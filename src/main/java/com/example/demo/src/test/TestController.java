@@ -1,21 +1,25 @@
 package com.example.demo.src.test;
 
-import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponse;
-import com.example.demo.src.test.model.PostCommentDto;
 import com.example.demo.src.test.model.GetMemoDto;
 import com.example.demo.src.test.model.MemoDto;
+import com.example.demo.src.test.model.PostCommentDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static com.example.demo.common.response.BaseResponseStatus.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @Tag(name = "test 도메인", description = "메모 API, 코멘트 API") // swagger 접속: http://localhost:9000/swagger-ui/index.html

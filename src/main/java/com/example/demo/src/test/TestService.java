@@ -1,21 +1,22 @@
 package com.example.demo.src.test;
 
+import static com.example.demo.common.entity.BaseEntity.State.ACTIVE;
+import static com.example.demo.common.response.BaseResponseStatus.INVALID_MEMO;
+import static com.example.demo.common.response.BaseResponseStatus.MODIFY_FAIL_MEMO;
+import static com.example.demo.common.response.BaseResponseStatus.POST_TEST_EXISTS_MEMO;
+
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.src.test.entity.Memo;
-import com.example.demo.src.test.model.PostCommentDto;
 import com.example.demo.src.test.model.GetMemoDto;
 import com.example.demo.src.test.model.MemoDto;
+import com.example.demo.src.test.model.PostCommentDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static com.example.demo.common.entity.BaseEntity.State.ACTIVE;
-import static com.example.demo.common.response.BaseResponseStatus.*;
 
 @RequiredArgsConstructor
 @Transactional
