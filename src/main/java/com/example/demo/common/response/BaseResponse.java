@@ -1,12 +1,12 @@
 package com.example.demo.common.response;
 
+import static com.example.demo.common.response.BaseResponseStatus.SUCCESS;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import static com.example.demo.common.response.BaseResponseStatus.SUCCESS;
 
 @Getter
 @AllArgsConstructor
