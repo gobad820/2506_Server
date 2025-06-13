@@ -4,19 +4,22 @@ import com.example.demo.common.entity.BaseEntity.State;
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponse;
 import com.example.demo.common.response.BaseResponseStatus;
+import com.example.demo.src.admin.model.UpdateUserReq;
 import com.example.demo.src.user.entity.User;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@Validated
 @RequestMapping("/app/admin")
 public class AdminController {
 
@@ -62,7 +66,7 @@ public class AdminController {
     @PatchMapping("/users/soft/delete/{userId}")
     public BaseResponse<User> softDeleteUser(@PathVariable Long userId) {
         validateUserId(userId);
-        User deletedUser = adminService.changeUserState(userId, State.DELETED);
+        User deletedUser = adminService.changeUserState(userId, State.INACTIVE);
         return new BaseResponse<>(deletedUser);
     }
 
@@ -73,15 +77,12 @@ public class AdminController {
         return new BaseResponse<>(BaseResponseStatus.NO_CONTENT);
     }
 
-    @PatchMapping("/user/update/{userId}")
+    @PatchMapping("/user/{userId}")
     public BaseResponse<User> updateUserInfo(@PathVariable Long userId,
-        @RequestParam(required = false) String name,
-        @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime createdDate,
-        @RequestParam(required = false) State state) {
+        @RequestBody @Valid UpdateUserReq updateUserReq) {
         validateUserId(userId);
-        validateDate(createdDate);
-        adminService.updateUser(userId, name, createdDate, state);
-        return null;
+        User updatedUser = adminService.updateUser(userId, updateUserReq);
+        return new BaseResponse<>(updatedUser);
     }
 
     private static void validateUserId(Long userId) {
