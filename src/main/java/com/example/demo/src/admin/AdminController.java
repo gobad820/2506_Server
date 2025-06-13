@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -74,8 +75,8 @@ public class AdminController {
 
     @PatchMapping("/user/update/{userId}")
     public BaseResponse<User> updateUserInfo(@PathVariable Long userId,
-        @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String name,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime createdDate,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime createdDate,
         @RequestParam(required = false) State state) {
         validateUserId(userId);
         validateDate(createdDate);
