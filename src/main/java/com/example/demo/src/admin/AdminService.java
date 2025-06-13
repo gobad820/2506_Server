@@ -62,7 +62,7 @@ public class AdminService {
             .and(UserSpecifications.hasState(state));
     }
 
-    public User deleteUser(Long userId) {
+    public void deleteUser(Long userId) {
         User foundUser = getUserById(userId);
         validateForHardDeletion(foundUser);
         try {
@@ -71,14 +71,13 @@ public class AdminService {
             log.error("데이터 무결성 제약 조건 위반 {}", userId);
             throw new BaseException(BaseResponseStatus.DELETE_FAIL_USERID);
         }
-        return foundUser;
     }
 
     private static void validateForHardDeletion(User foundUser) {
         if (foundUser.getState() != State.DELETED) {
             throw new BaseException(BaseResponseStatus.NOT_SOFT_DELETED_USER);
         }
-        if (foundUser.getUpdatedAt()
+        if (foundUser.getUpdatedAt() != null && foundUser.getUpdatedAt()
             .isAfter(LocalDateTime.now(KOREA_ZONE).minusDays(7))) {
             throw new BaseException(BaseResponseStatus.TOO_SOON_TO_DELETE);
         }
