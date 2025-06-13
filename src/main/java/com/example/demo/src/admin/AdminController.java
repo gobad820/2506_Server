@@ -69,8 +69,8 @@ public class AdminController {
     @DeleteMapping("/users/hard/delete/{userId}")
     public BaseResponse<User> hardDeleteUser(@PathVariable Long userId) {
         validateUserId(userId);
-        User deletedUser = adminService.deleteUser(userId);
-        return new BaseResponse<>(deletedUser);
+        adminService.deleteUser(userId);
+        return new BaseResponse<>(BaseResponseStatus.NO_CONTENT);
     }
 
     @PatchMapping("/user/update/{userId}")
