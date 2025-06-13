@@ -33,8 +33,8 @@ public class AdminDataManager {
         return userRepository.save(user);
     }
 
-    public Optional<User> deleteUser(Long userId) {
-        return userRepository.deleteUserById(userId);
+    public void deleteUser(Long userId) {
+        userRepository.deleteUserById(userId);
     }
 
     public Optional<User> getUserByIdAndState(Long id, State state) {
