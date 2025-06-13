@@ -42,7 +42,9 @@ public enum BaseResponseStatus {
     INVALID_DATE(false,HttpStatus.BAD_REQUEST.value(),"가입일은 오늘을 포함한 이전으로 설정해야 합니다."),
     DELETED_USER(false,HttpStatus.BAD_REQUEST.value(),"이미 삭제된 유저입니다."),
     NOT_SOFT_DELETED_USER(false,HttpStatus.BAD_REQUEST.value(),"아직 Soft Deleting 되지 않은 유저입니다."),
-    TOO_SOON_TO_DELETE(false,HttpStatus.BAD_REQUEST.value(),"7일이 지난 후 Hard Deleting이 가능합니다."),
+    TOO_SOON_TO_DELETE(false,HttpStatus.CONFLICT.value(),"7일이 지난 후 Hard Deleting이 가능합니다."),
+    INVALID_EMAIL(false,HttpStatus.BAD_REQUEST.value(), "올바르지 않을 이메일 형식입니다."),
+    MISSING_PARAMETER(false,HttpStatus.BAD_REQUEST.value(),"필수 파라미터가 누락되었습니다."),
 
 
 
