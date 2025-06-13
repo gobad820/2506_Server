@@ -7,7 +7,6 @@ import com.example.demo.src.user.entity.User;
 import com.example.demo.utils.JwtService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +16,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class AdminService {
@@ -43,6 +43,7 @@ public class AdminService {
         return adminDataManager.getAllUserInfos(spec, pageable);
     }
 
+    @Transactional
     public User changeUserState(Long userId, State state) {
         validateUserState(getUserById(userId).getState());
         User foundUser = adminDataManager.getUserInfoById(userId)
@@ -62,6 +63,7 @@ public class AdminService {
             .and(UserSpecifications.hasState(state));
     }
 
+    @Transactional
     public void deleteUser(Long userId) {
         User foundUser = getUserById(userId);
         validateForHardDeletion(foundUser);
@@ -96,6 +98,7 @@ public class AdminService {
         }
     }
 
+    @Transactional
     public void updateUser(Long userId, String name, LocalDateTime createdDate, State state) {
         validateUserState(state);
         User foundUser = adminDataManager.getUserByIdAndState(userId, state)
