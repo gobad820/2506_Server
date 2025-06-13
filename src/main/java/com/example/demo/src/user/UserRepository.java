@@ -10,13 +10,19 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
-    Optional<User> findByIdAndState(Long id, State state);
+    Optional<User> findUserByIdAndState(Long id, State state);
 
-    Optional<User> findByEmailAndState(String email, State state);
+    Optional<User> findUserByEmailAndState(String email, State state);
 
     List<User> findAllByEmailAndState(String email, State state);
 
     List<User> findAllByState(State state);
 
     Optional<User> findUserById(Long id);
+
+    Optional<User> deleteUserById(Long id);
+
+    Optional<User> findUserByNameAndState(String name, State state);
+
+
 }

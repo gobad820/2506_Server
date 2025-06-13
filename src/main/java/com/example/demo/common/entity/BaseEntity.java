@@ -27,6 +27,14 @@ public class BaseEntity {
     protected State state = State.ACTIVE;
 
     public enum State {
-        ACTIVE, INACTIVE;
+        ACTIVE, INACTIVE, DELETED;
+    }
+
+    public void renewUpdatedTime(LocalDateTime dateTime) {
+        this.updatedAt = dateTime;
+    }
+
+    public void renewCreatedTime(LocalDateTime dateTime) {
+        this.createdAt = dateTime;
     }
 }
