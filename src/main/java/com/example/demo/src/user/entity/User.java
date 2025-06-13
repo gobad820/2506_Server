@@ -12,11 +12,13 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
 @Getter
 @Entity // 필수, Class 를 Database Table화 해주는 것이다
+@Audited
 @Table(name = "USER") // Table 이름을 명시해주지 않으면 class 이름을 Table 이름으로 대체한다.
 public class User extends BaseEntity {
 
@@ -54,7 +56,9 @@ public class User extends BaseEntity {
         this.state = State.INACTIVE;
     }
 
-    public void updateState(State state){this.state = state;}
+    public void updateState(State state) {
+        this.state = state;
+    }
 
 
 }
