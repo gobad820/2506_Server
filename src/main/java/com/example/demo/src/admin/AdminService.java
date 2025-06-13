@@ -65,15 +65,13 @@ public class AdminService {
     public User deleteUser(Long userId) {
         User foundUser = getUserById(userId);
         validateForHardDeletion(foundUser);
-        User deletedUser;
         try {
-            deletedUser = adminDataManager.deleteUser(foundUser.getId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FIND_USER));
+            adminDataManager.deleteUser(foundUser.getId());
         } catch (DataIntegrityViolationException e) {
             log.error("데이터 무결성 제약 조건 위반 {}", userId);
             throw new BaseException(BaseResponseStatus.DELETE_FAIL_USERID);
         }
-        return deletedUser;
+        return foundUser;
     }
 
     private static void validateForHardDeletion(User foundUser) {
@@ -91,6 +89,9 @@ public class AdminService {
     }
 
     private static void validateUserState(State state) {
+        if (state == null) {
+            throw new BaseException(BaseResponseStatus.INVALID_STATE);
+        }
         if (state == State.DELETED) {
             throw new BaseException(BaseResponseStatus.DELETED_USER);
         }
