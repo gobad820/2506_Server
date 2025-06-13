@@ -12,6 +12,7 @@ public enum BaseResponseStatus {
      * 200 : 요청 성공
      */
     SUCCESS(true, HttpStatus.OK.value(), "요청에 성공하였습니다."),
+    NO_CONTENT(true,HttpStatus.NO_CONTENT.value(),"삭제 성공하였습니다."),
 
 
     /**
