@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
@@ -30,6 +31,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String email;
 
+    @NotAudited
     @Column(nullable = false)
     private String password;
 
