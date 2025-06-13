@@ -27,14 +27,15 @@ public class UserSpecifications {
     }
 
 
-    public static Specification<User> createdOnDate(LocalDate date) {
+    public static Specification<User> createdOnDate(LocalDateTime date) {
         return (root, query, criteriaBuilder) -> {
             if (date == null) {
                 return criteriaBuilder.conjunction();
             }
 
-            LocalDateTime startOfDay = date.atStartOfDay();
-            LocalDateTime endOfDay = date.atTime(23, 59, 59, 999_999_999);
+            LocalDate dateOnly = date.toLocalDate();
+            LocalDateTime startOfDay = dateOnly.atStartOfDay();
+            LocalDateTime endOfDay = dateOnly.atTime(23, 59, 59, 999_999_999);
 
             return criteriaBuilder.between(root.get("createdAt"), startOfDay, endOfDay);
         };

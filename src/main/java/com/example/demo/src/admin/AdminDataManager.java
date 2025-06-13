@@ -1,5 +1,6 @@
 package com.example.demo.src.admin;
 
+import com.example.demo.common.entity.BaseEntity.State;
 import com.example.demo.src.user.UserRepository;
 import com.example.demo.src.user.entity.User;
 import java.util.Optional;
@@ -24,11 +25,23 @@ public class AdminDataManager {
         return userRepository.findAll(spec, pageable);
     }
 
-    public Optional<User> getUserInfoById(Long id){
+    public Optional<User> getUserInfoById(Long id) {
         return userRepository.findUserById(id);
     }
 
-    public User saveUser(User user){
+    public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteUserById(userId);
+    }
+
+    public Optional<User> getUserByIdAndState(Long id, State state) {
+        return userRepository.findUserByIdAndState(id, state);
+    }
+
+    public Optional<User> getUserByNameAndState(String name, State state) {
+        return userRepository.findUserByNameAndState(name, state);
     }
 }
