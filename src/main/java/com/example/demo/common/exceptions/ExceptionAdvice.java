@@ -60,8 +60,8 @@ public class ExceptionAdvice {
 
         logFailureWarning(errors, "Constraining violation");
 
-        boolean isUserIdError = errors.stream()
-            .anyMatch(error -> error.toLowerCase().contains("id"));
+      boolean isUserIdError = errors.stream()
+         .anyMatch(error -> error.matches("(?i).*\\b(user_?id|userid)\\b.*"));
 
         if (isUserIdError) {
             return new BaseResponse<>(BaseResponseStatus.INVALID_ID);
@@ -85,7 +85,7 @@ public class ExceptionAdvice {
             return new BaseResponse<>(BaseResponseStatus.INVALID_STATE);
         }
 
-        if (exception.getName().toLowerCase().contains("id")) {
+       if (exception.getName().matches("(?i)^(user_?id|userid|id)$")) {
             return new BaseResponse<>(BaseResponseStatus.INVALID_ID);
         }
 
@@ -117,6 +117,7 @@ public class ExceptionAdvice {
         SignatureException.class,
     })
     public BaseResponse<BaseResponseStatus> handleJwtException(Exception exception) {
+        log.warn("JWT authentication failed: {}", exception.getMessage());
         return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
     }
 
@@ -124,7 +125,7 @@ public class ExceptionAdvice {
     @ExceptionHandler(NullPointerException.class)
     public BaseResponse<BaseResponseStatus> handleNullPointerException(
         NullPointerException exception) {
-        log.error("NullPointException 발생");
+        log.error("NullPointerException occurred",exception);
         return new BaseResponse<>(BaseResponseStatus.SERVER_ERROR);
     }
 
