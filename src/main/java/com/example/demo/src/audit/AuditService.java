@@ -84,6 +84,7 @@ public class AuditService {
     public Page<UserAuditDto> getSystemAuditHistory(UserAuditReq request,
         Pageable pageable) {
         try {
+            log.info("Request: {}", request);
 
             AuditReader reader = AuditReaderFactory.get(entityManager);
             AuditQuery query = reader.createQuery()
@@ -100,9 +101,6 @@ public class AuditService {
             List<Object[]> results = query.getResultList();
             List<UserAuditDto> auditInfos = results.stream().map(this::convertToUserAuditDto)
                 .collect(Collectors.toList());
-
-            AuditQuery countQuery = reader.createQuery()
-                .forRevisionsOfEntity(User.class, false, true);
 
             return new PageImpl<>(auditInfos, pageable, total);
         } catch (AuditException e) {
