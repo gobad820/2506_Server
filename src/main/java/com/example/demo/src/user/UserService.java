@@ -34,11 +34,12 @@ public class UserService {
     private final JwtService jwtService;
 
 
-    //POST
+    // POST
     public PostUserRes createUser(PostUserReq postUserReq) {
-        //중복 체크
-        Optional<User> checkUser = userRepository.findUserByEmailAndState(postUserReq.getEmail(), ACTIVE);
-        if(checkUser.isPresent() == true){
+        // 중복 체크
+        Optional<User> checkUser = userRepository.findUserByEmailAndState(postUserReq.getEmail(),
+            ACTIVE);
+        if (checkUser.isPresent() == true) {
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
 
@@ -66,29 +67,30 @@ public class UserService {
 
     public void modifyUserName(Long userId, PatchUserReq patchUserReq) {
         User user = userRepository.findUserByIdAndState(userId, ACTIVE)
-                .orElseThrow(() -> new BaseException(NOT_FIND_USER));
+            .orElseThrow(() -> new BaseException(NOT_FIND_USER));
         user.updateName(patchUserReq.getName());
     }
 
     public void deleteUser(Long userId) {
         User user = userRepository.findUserByIdAndState(userId, ACTIVE)
-                .orElseThrow(() -> new BaseException(NOT_FIND_USER));
+            .orElseThrow(() -> new BaseException(NOT_FIND_USER));
         user.deleteUser();
     }
 
     @Transactional(readOnly = true)
     public List<GetUserRes> getUsers() {
         List<GetUserRes> getUserResList = userRepository.findAllByState(ACTIVE).stream()
-                .map(GetUserRes::new)
-                .collect(Collectors.toList());
+            .map(GetUserRes::new)
+            .collect(Collectors.toList());
         return getUserResList;
     }
 
     @Transactional(readOnly = true)
     public List<GetUserRes> getUsersByEmail(String email) {
-        List<GetUserRes> getUserResList = userRepository.findAllByEmailAndState(email, ACTIVE).stream()
-                .map(GetUserRes::new)
-                .collect(Collectors.toList());
+        List<GetUserRes> getUserResList = userRepository.findAllByEmailAndState(email, ACTIVE)
+            .stream()
+            .map(GetUserRes::new)
+            .collect(Collectors.toList());
         return getUserResList;
     }
 
@@ -96,20 +98,22 @@ public class UserService {
     @Transactional(readOnly = true)
     public GetUserRes getUser(Long userId) {
         User user = userRepository.findUserByIdAndState(userId, ACTIVE)
-                .orElseThrow(() -> new BaseException(NOT_FIND_USER));
+            .orElseThrow(() -> new BaseException(NOT_FIND_USER));
         return new GetUserRes(user);
     }
 
     @Transactional(readOnly = true)
     public boolean checkUserByEmail(String email) {
         Optional<User> result = userRepository.findUserByEmailAndState(email, ACTIVE);
-        if (result.isPresent()) return true;
+        if (result.isPresent()) {
+            return true;
+        }
         return false;
     }
 
     public PostLoginRes logIn(PostLoginReq postLoginReq) {
         User user = userRepository.findUserByEmailAndState(postLoginReq.getEmail(), ACTIVE)
-                .orElseThrow(() -> new BaseException(NOT_FIND_USER));
+            .orElseThrow(() -> new BaseException(NOT_FIND_USER));
 
         String encryptPwd;
         try {
@@ -118,18 +122,18 @@ public class UserService {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
 
-        if(user.getPassword().equals(encryptPwd)){
+        if (user.getPassword().equals(encryptPwd)) {
             Long userId = user.getId();
             String jwt = jwtService.createJwt(userId);
-            return new PostLoginRes(userId,jwt);
-        } else{
+            return new PostLoginRes(userId, jwt);
+        } else {
             throw new BaseException(FAILED_TO_LOGIN);
         }
-
     }
 
     public GetUserRes getUserByEmail(String email) {
-        User user = userRepository.findUserByEmailAndState(email, ACTIVE).orElseThrow(() -> new BaseException(NOT_FIND_USER));
+        User user = userRepository.findUserByEmailAndState(email, ACTIVE)
+            .orElseThrow(() -> new BaseException(NOT_FIND_USER));
         return new GetUserRes(user);
     }
 }
