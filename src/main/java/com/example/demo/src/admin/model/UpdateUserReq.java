@@ -2,6 +2,7 @@ package com.example.demo.src.admin.model;
 
 import com.example.demo.common.entity.BaseEntity.State;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,10 @@ import lombok.NoArgsConstructor;
 public class UpdateUserReq {
 
 
+    @Size(max = 50)
     private String name;
     @Email
+    @Size(max = 100)
     private String email;
     private State state;
 
