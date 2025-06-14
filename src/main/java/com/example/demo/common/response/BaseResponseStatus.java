@@ -34,7 +34,7 @@ public enum BaseResponseStatus {
     INVALID_USER_JWT(false, HttpStatus.FORBIDDEN.value(), "권한이 없는 유저의 접근입니다."),
     NOT_FIND_USER(false, HttpStatus.NOT_FOUND.value(), "일치하는 유저가 없습니다."),
     INVALID_OAUTH_TYPE(false, HttpStatus.BAD_REQUEST.value(), "알 수 없는 소셜 로그인 형식입니다."),
-    INVALID_ID(false, HttpStatus.BAD_REQUEST.value(), "유효하지 않는 ID 입니다. 유저 ID는 1이상이어야 합니다."),
+    INVALID_ID(false, HttpStatus.BAD_REQUEST.value(), "유효하지 않는 ID 입니다."),
     INVALID_STATE(false, HttpStatus.BAD_REQUEST.value(), "유효하지 않는 State 입니다."),
     INVALID_PAGE(false, HttpStatus.BAD_REQUEST.value(), "유효하지 않는 페이지입니다."),
     INVALID_PAGE_SIZE(false, HttpStatus.BAD_REQUEST.value(), "유효하지 않는 페이지 크기입니다."),
@@ -47,6 +47,8 @@ public enum BaseResponseStatus {
     INVALID_DATE_RANGE(false, HttpStatus.BAD_REQUEST.value(), "종료 날짜가 시작 날짜보다 앞설 수는 없습니다."),
     INVALID_REQUEST_PARAM(false, HttpStatus.BAD_REQUEST.value(), "요청 파라미터가 올바르지 않습니다."),
     AUDIT_DATA_NOT_FOUND(false, HttpStatus.NOT_FOUND.value(), "기록을 찾을 수 없습니다."),
+    INVALID_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "올바르지 않을 이메일 형식입니다."),
+    MISSING_PARAMETER(false, HttpStatus.BAD_REQUEST.value(), "필수 파라미터가 누락되었습니다."),
 
     /**
      * 500 :  Database, Server 오류
@@ -63,11 +65,9 @@ public enum BaseResponseStatus {
     DELETE_FAIL_USERNAME(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "유저 삭제 실패"),
     DELETE_FAIL_USERID(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "유저 삭제 실패"),
     MODIFY_FAIL_MEMO(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "메모 수정 실패"),
+    AUDIT_SYSTEM_ERROR(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"감사 시스템 에러 발생하였습니다." ),
 
-    AUDIT_SYSTEM_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "감사 시스템 오류가 발생했습니다."),
-    UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다."),
-
-    ;
+    UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다.");
 
 
     private final boolean isSuccess;
