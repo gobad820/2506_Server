@@ -60,11 +60,11 @@ public class ExceptionAdvice {
 
         logFailureWarning(errors, "Constraining violation");
 
-      boolean isUserIdError = errors.stream()
-         .anyMatch(error -> error.matches("(?i).*\\b(user_?id|userid)\\b.*"));
+        boolean isUserIdError = errors.stream()
+            .anyMatch(error -> error.matches("(?i).*\\b(user_?id|userid)\\b.*"));
 
         if (isUserIdError) {
-            return new BaseResponse<>(BaseResponseStatus.INVALID_ID);
+            return new BaseResponse<>(BaseResponseStatus.INVALID_TARGET_USER_ID);
         }
         return new BaseResponse<>(BaseResponseStatus.INVALID_REQUEST_PARAM);
     }
@@ -85,7 +85,7 @@ public class ExceptionAdvice {
             return new BaseResponse<>(BaseResponseStatus.INVALID_STATE);
         }
 
-       if (exception.getName().matches("(?i)^(user_?id|userid|id)$")) {
+        if (exception.getName().matches("(?i)^(user_?id|userid|id)$")) {
             return new BaseResponse<>(BaseResponseStatus.INVALID_ID);
         }
 
@@ -125,7 +125,7 @@ public class ExceptionAdvice {
     @ExceptionHandler(NullPointerException.class)
     public BaseResponse<BaseResponseStatus> handleNullPointerException(
         NullPointerException exception) {
-        log.error("NullPointerException occurred",exception);
+        log.error("NullPointerException occurred", exception);
         return new BaseResponse<>(BaseResponseStatus.SERVER_ERROR);
     }
 

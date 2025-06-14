@@ -42,7 +42,7 @@ public enum BaseResponseStatus {
     DELETED_USER(false, HttpStatus.BAD_REQUEST.value(), "이미 삭제된 유저입니다."),
     NOT_SOFT_DELETED_USER(false, HttpStatus.BAD_REQUEST.value(), "아직 Soft Deleting 되지 않은 유저입니다."),
     TOO_SOON_TO_DELETE(false, HttpStatus.BAD_REQUEST.value(), "7일이 지난 후 Hard Deleting이 가능합니다."),
-    INVALID_TAGER_USER_ID(false, HttpStatus.BAD_REQUEST.value(),
+    INVALID_TARGET_USER_ID(false, HttpStatus.BAD_REQUEST.value(),
         "대상 사용자 ID가 유효하지 않습니다. 대상 사용자 ID는 1 이상이어야 합니다."),
     INVALID_DATE_RANGE(false, HttpStatus.BAD_REQUEST.value(), "종료 날짜가 시작 날짜보다 앞설 수는 없습니다."),
     INVALID_REQUEST_PARAM(false, HttpStatus.BAD_REQUEST.value(), "요청 파라미터가 올바르지 않습니다."),
