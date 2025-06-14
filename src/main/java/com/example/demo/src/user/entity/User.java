@@ -64,6 +64,9 @@ public class User extends BaseEntity {
     }
 
     public void updateEmail(String email) {
+        if (this.email == null || this.email.equals(email)) {
+            return;
+        }
         this.email = email;
     }
 
