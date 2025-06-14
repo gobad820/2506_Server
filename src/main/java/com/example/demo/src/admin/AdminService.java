@@ -3,6 +3,7 @@ package com.example.demo.src.admin;
 import com.example.demo.common.entity.BaseEntity.State;
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponseStatus;
+import com.example.demo.src.admin.model.UpdateUserReq;
 import com.example.demo.src.user.entity.User;
 import com.example.demo.utils.JwtService;
 import java.time.LocalDateTime;
@@ -76,7 +77,7 @@ public class AdminService {
     }
 
     private static void validateForHardDeletion(User foundUser) {
-        if (foundUser.getState() != State.DELETED) {
+        if (foundUser.getState() != State.INACTIVE) {
             throw new BaseException(BaseResponseStatus.NOT_SOFT_DELETED_USER);
         }
         if (foundUser.getUpdatedAt() != null && foundUser.getUpdatedAt()
@@ -90,22 +91,17 @@ public class AdminService {
     }
 
     private static void validateUserState(State state) {
-        if (state == null) {
-            throw new BaseException(BaseResponseStatus.INVALID_STATE);
-        }
-        if (state == State.DELETED) {
+        if (state == State.INACTIVE) {
             throw new BaseException(BaseResponseStatus.DELETED_USER);
         }
     }
 
     @Transactional
-    public void updateUser(Long userId, String name, LocalDateTime createdDate, State state) {
-        validateUserState(state);
-        User foundUser = adminDataManager.getUserByIdAndState(userId, state)
+    public User updateUser(Long userId, UpdateUserReq updateUserReq) {
+        validateUserState(updateUserReq.getState());
+        User foundUser = adminDataManager.getUserByIdAndState(userId, State.ACTIVE)
             .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FIND_USER));
-        foundUser.updateState(state);
-        foundUser.updateName(name);
-        foundUser.renewCreatedTime(createdDate);
-        foundUser.renewUpdatedTime(LocalDateTime.now(KOREA_ZONE));
+        foundUser.updateFields(updateUserReq);
+        return foundUser;
     }
 }

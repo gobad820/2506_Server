@@ -1,6 +1,7 @@
 package com.example.demo.src.user.entity;
 
 import com.example.demo.common.entity.BaseEntity;
+import com.example.demo.src.admin.model.UpdateUserReq;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,6 +61,25 @@ public class User extends BaseEntity {
 
     public void updateState(State state) {
         this.state = state;
+    }
+
+    public void updateEmail(String email) {
+        if (this.email == null || this.email.equals(email)) {
+            return;
+        }
+        this.email = email;
+    }
+
+    public void updateFields(UpdateUserReq req) {
+        if (req.hasName()) {
+            updateName(req.getName());
+        }
+        if (req.hasEmail()) {
+            updateEmail(req.getEmail());
+        }
+        if (req.hasState()) {
+            updateState(req.getState());
+        }
     }
 
 
