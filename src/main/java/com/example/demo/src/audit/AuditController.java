@@ -5,6 +5,7 @@ import com.example.demo.src.audit.dto.UserAuditDto;
 import com.example.demo.src.audit.dto.UserAuditReq;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +71,7 @@ public class AuditController {
      */
     @GetMapping("/revisions/{revisionId}")
     public BaseResponse<UserAuditDto> getRevisionDetail(
-        @PathVariable @Min(value = 1, message = "리비전 ID는 1 이상이어야 합니다.") Long revisionId) {
+        @PathVariable @Min(value = 1, message = "리비전 ID는 1 이상이어야 합니다.") @Max(value = Integer.MAX_VALUE, message = "리비전 ID 값이 너무 큽니다.") Long revisionId) {
         log.info("revision ID {}의 reivision detail을 조회", revisionId);
         log.info("리비전 디테일 조회, revisionId: {}", revisionId);
         UserAuditDto revisionDetail = auditService.getRevisionDetail(revisionId);
