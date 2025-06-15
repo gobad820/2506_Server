@@ -25,6 +25,7 @@ public enum BaseResponseStatus {
     POST_TEST_EXISTS_MEMO(false, HttpStatus.BAD_REQUEST.value(), "중복된 메모입니다."),
 
     RESPONSE_ERROR(false, HttpStatus.NOT_FOUND.value(), "값을 불러오는데 실패하였습니다."),
+    USERNAME_UNCHANGED(false, HttpStatus.BAD_REQUEST.value(), "변경 전 성명과 동일한 성명입니다."),
 
     DUPLICATED_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "중복된 이메일입니다."),
     INVALID_MEMO(false, HttpStatus.NOT_FOUND.value(), "존재하지 않는 메모입니다."),
@@ -40,6 +41,7 @@ public enum BaseResponseStatus {
     INVALID_PAGE_SIZE(false, HttpStatus.BAD_REQUEST.value(), "유효하지 않는 페이지 크기입니다."),
     INVALID_DATE(false, HttpStatus.BAD_REQUEST.value(), "가입일은 오늘을 포함한 이전으로 설정해야 합니다."),
     DELETED_USER(false, HttpStatus.BAD_REQUEST.value(), "이미 삭제된 유저입니다."),
+    WITHDRAWN_USER(false, HttpStatus.BAD_REQUEST.value(), "이미 탈퇴한 유저입니다."),
     NOT_SOFT_DELETED_USER(false, HttpStatus.BAD_REQUEST.value(), "아직 Soft Deleting 되지 않은 유저입니다."),
     TOO_SOON_TO_DELETE(false, HttpStatus.BAD_REQUEST.value(), "7일이 지난 후 Hard Deleting이 가능합니다."),
     INVALID_TARGET_USER_ID(false, HttpStatus.BAD_REQUEST.value(),
@@ -49,7 +51,9 @@ public enum BaseResponseStatus {
     AUDIT_DATA_NOT_FOUND(false, HttpStatus.NOT_FOUND.value(), "기록을 찾을 수 없습니다."),
     INVALID_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "올바르지 않을 이메일 형식입니다."),
     MISSING_PARAMETER(false, HttpStatus.BAD_REQUEST.value(), "필수 파라미터가 누락되었습니다."),
-    REVISION_ID_TOO_LARGE(false,HttpStatus.BAD_REQUEST.value(), "revision ID값이 너무 큽니다."),
+    REVISION_ID_TOO_LARGE(false, HttpStatus.BAD_REQUEST.value(), "revision ID값이 너무 큽니다."),
+    EMPTY_PASSWORD(false, HttpStatus.BAD_REQUEST.value(), "비밀번호가 누락되었습니다."),
+    ACCOUNT_NOT_LOCKED(false, HttpStatus.BAD_REQUEST.value(), "계정이 잠금 상태가 아닙니다."),
 
     /**
      * 500 :  Database, Server 오류
@@ -66,9 +70,11 @@ public enum BaseResponseStatus {
     DELETE_FAIL_USERNAME(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "유저 삭제 실패"),
     DELETE_FAIL_USERID(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "유저 삭제 실패"),
     MODIFY_FAIL_MEMO(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "메모 수정 실패"),
-    AUDIT_SYSTEM_ERROR(false,HttpStatus.INTERNAL_SERVER_ERROR.value(),"감사 시스템 에러 발생하였습니다." ),
+    AUDIT_SYSTEM_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "감사 시스템 에러 발생하였습니다."),
 
-    UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다.");
+    UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다."),
+    JWT_CREATE_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "JWT 생성이 실패했습니다. "),
+    ;
 
 
     private final boolean isSuccess;
