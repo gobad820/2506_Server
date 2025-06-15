@@ -16,6 +16,12 @@ import com.example.demo.src.user.model.PostUserReq;
 import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.src.user.model.UserConsentReq;
 import com.example.demo.utils.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
@@ -41,6 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @Validated
+@Tag(name = "회원 관리", description = "회원 가입, 로그인, 정보 수정 등 회원 API")
 @RequestMapping("/app/users")
 public class UserController {
 
@@ -60,6 +67,11 @@ public class UserController {
     // Body
     @ResponseBody
     @PostMapping("")
+    @Operation(summary = "회원가입", description = "새로운 회원을 등록합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "회원가입 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 요청 데이터"),
+    })
     public BaseResponse<PostUserRes> createUser(@Valid @RequestBody PostUserReq postUserReq) {
         PostUserRes postUserRes = userService.createUser(postUserReq);
         return new BaseResponse<>(postUserRes);
@@ -72,13 +84,18 @@ public class UserController {
      */
     // Query String
     @ResponseBody
-    @GetMapping("") // (GET) 127.0.0.1:9000/app/users
+    @GetMapping("")
+    @Operation(summary = "회원 목록 조회", description = "전체 회원 목록을 조회하거나 이메일로 검색합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "조회 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 이메일 형식")
+    })
     public BaseResponse<List<GetUserRes>> getUsers(
+        @Parameter(description = "검색할 이메일 주소 (선택사항)")
         @RequestParam(required = false)
         @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
             message = "이메일 형식이 올바르지 않습니다.")
-        String Email
-    ) {
+        String Email) {
         if (Email == null) {
             List<GetUserRes> getUsersRes = userService.getUsers();
             return new BaseResponse<>(getUsersRes);
@@ -94,8 +111,15 @@ public class UserController {
      */
     // Path-variable
     @ResponseBody
-    @GetMapping("/{userId}") // (GET) 127.0.0.1:9000/app/users/:userId
+    @GetMapping("/{userId}")
+    @Operation(summary = "회원 상세 조회", description = "특정 회원의 상세 정보를 조회합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "조회 성공"),
+        @ApiResponse(responseCode = "404", description = "회원을 찾을 수 없음")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
     public BaseResponse<GetUserRes> getUser(
+        @Parameter(description = "회원 ID", required = true, example = "1")
         @PathVariable("userId")
         @Min(value = 1, message = "사용자 ID는 1 이상이어야 합니다.")
         Long userId) {
@@ -103,15 +127,23 @@ public class UserController {
         return new BaseResponse<>(getUserRes);
     }
 
-
     /**
      * 유저정보변경 API [PATCH] /app/users/:userId
      *
      * @return BaseResponse<String>
      */
+
     @ResponseBody
     @PatchMapping("/{userId}")
+    @Operation(summary = "회원 정보 수정", description = "회원의 정보를 수정합니다. 본인만 수정 가능합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "수정 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+        @ApiResponse(responseCode = "403", description = "권한 없음 (본인이 아님)")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
     public BaseResponse<String> modifyUserName(
+        @Parameter(description = "회원 ID", required = true, example = "1")
         @PathVariable("userId")
         @Min(value = 1, message = "사용자 ID는 1 이상이어야 합니다.")
         Long userId,
@@ -125,7 +157,6 @@ public class UserController {
         userService.modifyUserName(userId, patchUserReq);
         String result = "수정 완료!!";
         return new BaseResponse<>(result);
-
     }
 
     /**
@@ -133,9 +164,18 @@ public class UserController {
      *
      * @return BaseResponse<String>
      */
+
     @ResponseBody
     @DeleteMapping("/{userId}")
-    public BaseResponse<String> deleteUser(@PathVariable("userId") Long userId) {
+    @Operation(summary = "회원 탈퇴", description = "회원을 탈퇴 처리합니다. 본인만 탈퇴 가능합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "탈퇴 성공"),
+        @ApiResponse(responseCode = "403", description = "권한 없음 (본인이 아님)")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
+    public BaseResponse<String> deleteUser(
+        @Parameter(description = "회원 ID", required = true, example = "1")
+        @PathVariable("userId") Long userId) {
         log.info("=======UserID========\n{}", userId);
         Long jwtUserId = jwtService.getUserId();
 
@@ -155,8 +195,13 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/logIn")
-    public BaseResponse<PostLoginRes> logIn(
-        @Valid @RequestBody PostLoginReq postLoginReq) {
+    @Operation(summary = "로그인", description = "이메일과 비밀번호로 로그인합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "로그인 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 로그인 정보"),
+        @ApiResponse(responseCode = "401", description = "인증 실패")
+    })
+    public BaseResponse<PostLoginRes> logIn(@Valid @RequestBody PostLoginReq postLoginReq) {
         log.info("=======PostLoginReq=======\n{}", postLoginReq.toString());
         PostLoginRes postLoginRes = userService.logIn(postLoginReq);
         return new BaseResponse<>(postLoginRes);
@@ -169,12 +214,16 @@ public class UserController {
      * @return void
      */
     @GetMapping("/auth/{socialLoginType}/login")
+    @Operation(summary = "소셜 로그인 리다이렉트", description = "소셜 로그인 인증 페이지로 리다이렉트합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "302", description = "리다이렉트 성공"),
+        @ApiResponse(responseCode = "400", description = "지원하지 않는 소셜 로그인 타입")
+    })
     public void socialLoginRedirect(
+        @Parameter(description = "소셜 로그인 타입", example = "GOOGLE")
         @PathVariable(name = "socialLoginType")
-        @Pattern(regexp = "^(GOOGLE|NAVER|KAKAO)$",
-            message = "지원하지 않는 소셜 로그인 타입입니다.")
-        String SocialLoginPath)
-        throws IOException {
+        @Pattern(regexp = "^(GOOGLE|NAVER|KAKAO)$", message = "지원하지 않는 소셜 로그인 타입입니다.")
+        String SocialLoginPath) throws IOException {
         SocialLoginType socialLoginType = SocialLoginType.valueOf(SocialLoginPath.toUpperCase());
         oAuthService.accessRequest(socialLoginType);
     }
@@ -187,13 +236,20 @@ public class UserController {
      * @param code            API Server 로부터 넘어오는 code
      * @return SNS Login 요청 결과로 받은 Json 형태의 java 객체 (access_token, jwt_token, user_num 등)
      */
+
     @ResponseBody
     @GetMapping(value = "/auth/{socialLoginType}/login/callback")
+    @Operation(summary = "소셜 로그인 콜백", description = "소셜 로그인 인증 서버로부터의 콜백을 처리합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "소셜 로그인 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 인증 코드")
+    })
     public BaseResponse<GetSocialOAuthRes> socialLoginCallback(
+        @Parameter(description = "소셜 로그인 타입", example = "GOOGLE")
         @PathVariable(name = "socialLoginType")
-        @Pattern(regexp = "^(GOOGLE|NAVER|KAKAO)$"
-            , message = "지원하지 않는 소셜 로그인 타입입니다.")
+        @Pattern(regexp = "^(GOOGLE|NAVER|KAKAO)$", message = "지원하지 않는 소셜 로그인 타입입니다.")
         String socialLoginPath,
+        @Parameter(description = "소셜 로그인 인증 코드", required = true)
         @RequestParam(name = "code")
         @NotBlank(message = "인증 코드가 필요합니다.")
         String code) throws IOException, BaseException {
@@ -205,26 +261,36 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/consent")
-    public BaseResponse<String> updateUserConsent(
-        @Valid @RequestBody UserConsentReq consentReq
-    ) {
+    @Operation(summary = "개인정보 동의 설정", description = "사용자의 개인정보 동의 설정을 변경합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "동의 설정 변경 성공"),
+        @ApiResponse(responseCode = "403", description = "권한 없음")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
+    public BaseResponse<String> updateUserConsent(@Valid @RequestBody UserConsentReq consentReq) {
         Long jwtUserId = jwtService.getUserId();
         log.info("개인정보 동의 : userId = {}", jwtUserId);
         jwtService.updateUserConsent(jwtUserId, consentReq);
         return new BaseResponse<>("개인정보 동의 설정이 변경되었습니다.");
     }
 
+
     @ResponseBody
     @PostMapping("/unlock")
+    @Operation(summary = "계정 잠금 해제 요청", description = "잠긴 계정의 해제를 요청합니다.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "잠금 해제 요청 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 이메일 형식"),
+        @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
+    })
     public BaseResponse<String> requestAccountUnlock(
+        @Parameter(description = "잠금 해제할 계정의 이메일", required = true, example = "user@example.com")
         @RequestParam
         @Email(message = "유효한 이메일 형식이어야 합니다.")
         @NotBlank(message = "이메일은 필수값입니다.")
-        String email
-    ) {
+        String email) {
         log.info("계정 잠금 해제 요청: email = {}", email);
         userService.requestAccountUnlock(email);
-
         return new BaseResponse<>("계정 잠금 해제 요청이 처리되었습니다. 관리자 승인 후 해제됩니다.");
     }
 }

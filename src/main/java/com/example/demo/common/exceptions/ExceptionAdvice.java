@@ -23,7 +23,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class ExceptionAdvice {
 
-    @ExceptionHandler(BaseException.class)
+     @ExceptionHandler(BaseException.class)
     protected ResponseEntity<BaseResponse<BaseResponseStatus>> BaseExceptionHandle(
         BaseException exception) {
         BaseResponseStatus status = exception.getStatus();
