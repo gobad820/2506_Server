@@ -10,7 +10,7 @@ public class Constant {
         NAVER
     }
 
-    public static final long WITHDRAWL_GRACE_PERIOD_DAYS = 7;
+    public static final long WITHDRAWAL_GRACE_PERIOD_DAYS = 7;
     public static final ZoneId KOREA_ZONE = ZoneId.of("Asia/Seoul");
 }
 
