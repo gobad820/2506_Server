@@ -122,7 +122,6 @@ public class AuditService {
     public UserAuditDto getRevisionDetail(Long revisionId) {
         try {
             log.debug("Retrieving revision detail for revision ID:{}", revisionId);
-
             AuditReader reader = AuditReaderFactory.get(entityManager);
             AuditQuery query = reader.createQuery().forRevisionsOfEntity(User.class, false, true)
                 .add(AuditEntity.revisionNumber().eq(revisionId.intValue()));
