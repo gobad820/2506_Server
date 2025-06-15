@@ -51,10 +51,10 @@ public class AuditService {
      * @throws BaseException 감사 시스템 오류 시
      */
     public List<UserAuditRes> getUserAudit(Long userId) {
+        User user = auditDataManager.getUserByIdAndState(userId,
+                State.ACTIVE)
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FIND_USER));
         try {
-            User user = auditDataManager.getUserByIdAndState(userId,
-                    State.ACTIVE)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FIND_USER));
             AuditReader reader = AuditReaderFactory.get(entityManager);
             AuditQuery query = reader.createQuery()
                 .forRevisionsOfEntity(User.class, false, true)
