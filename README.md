@@ -82,7 +82,7 @@
 
 개발자가 직접 생성하는 것이 아니므로, 아래 다이어그램은 Envers가 내부적으로 어떻게 동작하는지 이해를 돕기 위한 참고용입니다.
 
-![Image](https://github.com/user-attachments/assets/0138595e-ec7c-439d-af75-c18edb491f24)
+![Image](https://github.com/user-attachments/assets/91e3f2ac-f69b-4153-a887-abcf5cc61de0)
 
 - **REVINFO**: 모든 변경의 시점(Timestamp)과 고유 리비전 번호(REV)를 기록하는 마스터 테이블입니다.
 - **USER_AUD**: `users` 테이블의 데이터 변경 내역이 기록됩니다. 모든 감사 테이블은 `REVINFO`의 리비전 번호를 참조하여 변경 시점을 추적합니다.
