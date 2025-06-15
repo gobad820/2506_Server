@@ -40,6 +40,8 @@ springdoc:
     operationsSorter: method
     disable-swagger-default-url: true
     display-request-duration: true
+    try-it-out-enabled: true
+    filter: true
   api-docs:
     path: /api-docs
   show-actuator: true

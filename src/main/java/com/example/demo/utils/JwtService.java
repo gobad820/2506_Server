@@ -5,12 +5,14 @@ import static com.example.demo.common.response.BaseResponseStatus.EMPTY_JWT;
 import static com.example.demo.common.response.BaseResponseStatus.INVALID_JWT;
 
 import com.example.demo.common.exceptions.BaseException;
+import com.example.demo.src.user.model.UserConsentReq;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -33,7 +35,7 @@ public class JwtService {
                 .setHeaderParam("type","jwt")
                 .claim("userIdx",userId)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*365)))
+                .setExpiration(new Date(System.currentTimeMillis()+ (1000L * 60 * 60 * 24 * 365)))
                 .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
                 .compact();
     }
@@ -55,7 +57,7 @@ public class JwtService {
     public Long getUserId() throws BaseException{
         //1. JWT 추출
         String accessToken = getJwt();
-        if(accessToken == null || accessToken.length() == 0){
+        if(accessToken == null || accessToken.isEmpty()){
             throw new BaseException(EMPTY_JWT);
         }
 
@@ -73,4 +75,7 @@ public class JwtService {
         return claims.getBody().get("userId",Long.class);
     }
 
+    public void updateUserConsent(Long jwtUserId, @Valid UserConsentReq consetReq) {
+
+    }
 }
