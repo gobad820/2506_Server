@@ -80,9 +80,7 @@
 해당 프로젝트는 변경 이력을 추적하기 위해 **Hibernate Envers**를 사용합니다.
 `@Audited` 어노테이션이 붙은 엔티티에 대해 아래와 같은 감사 테이블들이 **자동으로 생성**됩니다.
 
-개발자가 직접 생성하는 것이 아니므로, 아래 다이어그램은 Envers가 내부적으로 어떻게 동작하는지 이해를 돕기 위한 참고용입니다.
-
-![Image](https://github.com/user-attachments/assets/91e3f2ac-f69b-4153-a887-abcf5cc61de0)
+![Image](https://github.com/user-attachments/assets/11c15a69-627a-4c73-b1ed-08b87e45a805)
 
 - **REVINFO**: 모든 변경의 시점(Timestamp)과 고유 리비전 번호(REV)를 기록하는 마스터 테이블입니다.
 - **USER_AUD**: `users` 테이블의 데이터 변경 내역이 기록됩니다. 모든 감사 테이블은 `REVINFO`의 리비전 번호를 참조하여 변경 시점을 추적합니다.
@@ -234,7 +232,8 @@ JSON
    프로젝트 루트 디렉토리에서 아래의 Gradle 명령어를 실행하여 애플리케이션을 시작합니다.
 
    ```bash
-   ./gradlew bootRun
+   ./gradlew build
+   nohup java -jar build/libs/demo-0.0.1-SNAPSHOT.jar > application.log 2>&1 &
    ```
 
 5. **접속**
