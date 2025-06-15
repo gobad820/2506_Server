@@ -1,9 +1,11 @@
 package com.example.demo.src.audit;
 
+import static com.example.demo.common.Constant.KOREA_ZONE;
+
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponseStatus;
-import com.example.demo.src.audit.dto.UserAuditDto;
-import com.example.demo.src.audit.dto.UserAuditReq;
+import com.example.demo.src.audit.model.UserAuditRes;
+import com.example.demo.src.audit.model.UserAuditReq;
 import com.example.demo.src.user.entity.User;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -33,7 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class AuditService {
 
-    private static final ZoneId KOREA_ZONE = ZoneId.of("Asia/Seoul");
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -45,7 +46,7 @@ public class AuditService {
      * @return 해당 사용자의 감사 기록
      * @throws BaseException 감사 시스템 오류 시
      */
-    public List<UserAuditDto> getUserAudit(Long userId) {
+    public List<UserAuditRes> getUserAudit(Long userId) {
         try {
             AuditReader reader = AuditReaderFactory.get(entityManager);
             AuditQuery query = reader.createQuery()
@@ -54,16 +55,16 @@ public class AuditService {
                 .addOrder(AuditEntity.revisionNumber().asc());
             @SuppressWarnings("unchecked")
             List<Object[]> resultList = query.getResultList();
-            ArrayList<UserAuditDto> userAuditDtos = new ArrayList<>();
+            ArrayList<UserAuditRes> userAuditRes = new ArrayList<>();
             for (Object[] result : resultList) {
                 try {
-                    UserAuditDto userAuditDto = convertToUserAuditDto(result);
-                    userAuditDtos.add(userAuditDto);
+                    UserAuditRes auditRes = convertToUserAuditDto(result);
+                    userAuditRes.add(auditRes);
                 } catch (Exception e) {
                     log.error("Error converting audit record for user id: {}", userId);
                 }
             }
-            return userAuditDtos;
+            return userAuditRes;
         } catch (AuditException e) {
             log.error("Hibernate Envers audit error for user Id: {}", userId, e);
             throw new BaseException(BaseResponseStatus.AUDIT_SYSTEM_ERROR);
@@ -81,7 +82,7 @@ public class AuditService {
      * @return 페이징된 기록
      * @throws BaseException 감사 시스템 오류 시
      */
-    public Page<UserAuditDto> getSystemAuditHistory(UserAuditReq request,
+    public Page<UserAuditRes> getSystemAuditHistory(UserAuditReq request,
         Pageable pageable) {
         try {
             log.info("Request: {}", request);
@@ -100,7 +101,7 @@ public class AuditService {
             query = addPagination(query, pageable);
 
             List<Object[]> results = query.getResultList();
-            List<UserAuditDto> auditInfos = results.stream().map(this::convertToUserAuditDto)
+            List<UserAuditRes> auditInfos = results.stream().map(this::convertToUserAuditDto)
                 .collect(Collectors.toList());
 
             return new PageImpl<>(auditInfos, pageable, total);
@@ -121,7 +122,7 @@ public class AuditService {
      * @return revision detail
      * @throws BaseException 존재하지 않는 리비전이거나 시스템 오류 발생 시
      */
-    public UserAuditDto getRevisionDetail(Long revisionId) {
+    public UserAuditRes getRevisionDetail(Long revisionId) {
         try {
             log.debug("Retrieving revision detail for revision ID:{}", revisionId);
             AuditReader reader = AuditReaderFactory.get(entityManager);
@@ -136,7 +137,7 @@ public class AuditService {
                 throw new BaseException(BaseResponseStatus.AUDIT_DATA_NOT_FOUND);
             }
 
-            UserAuditDto result = convertToUserAuditDto(results.get(0));
+            UserAuditRes result = convertToUserAuditDto(results.get(0));
             log.debug("revision ID {} 조회 성공", revisionId);
             return result;
         } catch (BaseException e) {
@@ -166,7 +167,7 @@ public class AuditService {
         return countQuery.getResultList().size();
     }
 
-    private UserAuditDto convertToUserAuditDto(Object[] results) {
+    private UserAuditRes convertToUserAuditDto(Object[] results) {
         User userRevision = (User) results[0];
         DefaultRevisionEntity revisionEntity = (DefaultRevisionEntity) results[1];
         RevisionType revisionType = (RevisionType) results[2];
@@ -174,7 +175,7 @@ public class AuditService {
         LocalDateTime revDateTime = new Date(revisionEntity.getTimestamp()).toInstant()
             .atZone(KOREA_ZONE).toLocalDateTime();
 
-        return UserAuditDto.from(userRevision, (long) revisionEntity.getId(), revDateTime,
+        return UserAuditRes.from(userRevision, (long) revisionEntity.getId(), revDateTime,
             revisionType);
     }
 

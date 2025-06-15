@@ -1,6 +1,7 @@
 package com.example.demo.src.user;
 
 
+import static com.example.demo.common.Constant.WITHDRAWL_GRACE_PERIOD_DAYS;
 import static com.example.demo.common.entity.BaseEntity.State.ACTIVE;
 import static com.example.demo.common.entity.BaseEntity.State.LOCKED;
 import static com.example.demo.common.response.BaseResponseStatus.ACCOUNT_NOT_LOCKED;
@@ -52,7 +53,6 @@ public class UserService {
     private final JwtService jwtService;
 
 
-    private static final long WITHDRAWL_GRACE_PERIOD_DAYS = 7;
 
     // POST
     public PostUserRes createUser(PostUserReq postUserReq) {
