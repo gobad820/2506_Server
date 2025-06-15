@@ -95,7 +95,10 @@ public class AuditController {
         @ApiResponse(responseCode = "401", description = "인증 실패 (BaseResponseStatus.INVALID_JWT)"),
         @ApiResponse(responseCode = "403", description = "관리자 권한 필요 (BaseResponseStatus.INVALID_USER_JWT)")})
     public BaseResponse<UserAuditDto> getRevisionDetail(
-        @Parameter(description = "리비전 ID", required = true, example = "1") @PathVariable @Min(value = 1, message = "리비전 ID는 1 이상이어야 합니다.") @Max(value = Integer.MAX_VALUE, message = "리비전 ID 값이 너무 큽니다.") Long revisionId) {
+        @Parameter(description = "리비전 ID", required = true, example = "1")
+        @PathVariable @Min(value = 1, message = "리비전 ID는 1 이상이어야 합니다.")
+        @Max(value = Integer.MAX_VALUE, message = "리비전 ID 값이 너무 큽니다.")
+        Long revisionId) {
         log.info("revision ID {}의 revision detail을 조회", revisionId);
         log.info("리비전 디테일 조회, revisionId: {}", revisionId);
         UserAuditDto revisionDetail = auditService.getRevisionDetail(revisionId);

@@ -64,7 +64,6 @@ public class UserController {
      *
      * @return BaseResponse<PostUserRes>
      */
-    // Body
     @ResponseBody
     @PostMapping("")
     @Operation(summary = "회원가입", description = "새로운 회원을 등록합니다.")
@@ -78,11 +77,10 @@ public class UserController {
     }
 
     /**
-     * 회원 조회 API [GET] /users 회원 번호 및 이메일 검색 조회 API [GET] /app/users? Email=
+     * 회원 조회 API [GET] /users 회원 번호 및 이메일 검색 조회 API [GET] /app/users? email=
      *
      * @return BaseResponse<List < GetUserRes>>
      */
-    // Query String
     @ResponseBody
     @GetMapping("")
     @Operation(summary = "회원 목록 조회", description = "전체 회원 목록을 조회하거나 이메일로 검색합니다.")
@@ -95,12 +93,12 @@ public class UserController {
         @RequestParam(required = false)
         @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
             message = "이메일 형식이 올바르지 않습니다.")
-        String Email) {
-        if (Email == null) {
+        String email) {
+        if (email == null) {
             List<GetUserRes> getUsersRes = userService.getUsers();
             return new BaseResponse<>(getUsersRes);
         }
-        List<GetUserRes> getUsersRes = userService.getUsersByEmail(Email);
+        List<GetUserRes> getUsersRes = userService.getUsersByEmail(email);
         return new BaseResponse<>(getUsersRes);
     }
 
@@ -109,7 +107,6 @@ public class UserController {
      *
      * @return BaseResponse<GetUserRes>
      */
-    // Path-variable
     @ResponseBody
     @GetMapping("/{userId}")
     @Operation(summary = "회원 상세 조회", description = "특정 회원의 상세 정보를 조회합니다.")

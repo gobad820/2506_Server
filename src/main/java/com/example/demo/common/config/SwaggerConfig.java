@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
         description = "스프링부트 demo 서비스 CRUD 실습 API 명세서",
         version = "v1.0.0"))
 @SecurityScheme(
-    name = "Bearer Authentification",
+    name = "Bearer Authentication",
     type = SecuritySchemeType.HTTP,
     bearerFormat = "JWT",
     scheme = "bearer"
