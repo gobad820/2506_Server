@@ -91,6 +91,9 @@ public class AuditService {
      */
     public Page<UserAuditRes> getSystemAuditHistory(UserAuditReq request,
         Pageable pageable) {
+        auditDataManager.getUserByIdAndState(request.getTargetUserId(),
+                State.ACTIVE)
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FIND_USER));
         try {
             log.info("Request: {}", request);
 
