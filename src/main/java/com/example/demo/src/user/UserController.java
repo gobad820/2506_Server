@@ -172,7 +172,9 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     public BaseResponse<String> deleteUser(
         @Parameter(description = "회원 ID", required = true, example = "1")
-        @PathVariable("userId") Long userId) {
+        @PathVariable("userId")
+        @Min(value = 1, message = "사용자 ID는 1 이상이어야 합니다.")
+        Long userId) {
         log.info("=======UserID========\n{}", userId);
         Long jwtUserId = jwtService.getUserId();
 
