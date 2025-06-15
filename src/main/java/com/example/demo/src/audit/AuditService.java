@@ -92,6 +92,7 @@ public class AuditService {
 
             query = addDateRangeFilter(query, request.getStartDateTime(), request.getEndDateTime());
             query = addTargetUserFilter(query, request.getTargetUserId());
+            query = addRevisionTypeFilter(query, request.getRevisionType());
 
             long total = getTotalCount(request);
             log.info("Total Request Number {}", total);
@@ -111,6 +112,7 @@ public class AuditService {
             throw new BaseException(BaseResponseStatus.AUDIT_SYSTEM_ERROR);
         }
     }
+
 
     /**
      * 특정 리비전 디테일 조회
@@ -196,6 +198,13 @@ public class AuditService {
     private AuditQuery addTargetUserFilter(AuditQuery query, Long targetUserId) {
         if (targetUserId != null) {
             query.add(AuditEntity.id().eq(targetUserId));
+        }
+        return query;
+    }
+
+    private AuditQuery addRevisionTypeFilter(AuditQuery query, RevisionType revisionType) {
+        if (revisionType != null) {
+            query.add(AuditEntity.revisionType().eq(revisionType));
         }
         return query;
     }
