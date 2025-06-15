@@ -54,6 +54,7 @@ public enum BaseResponseStatus {
     REVISION_ID_TOO_LARGE(false, HttpStatus.BAD_REQUEST.value(), "revision ID값이 너무 큽니다."),
     EMPTY_PASSWORD(false, HttpStatus.BAD_REQUEST.value(), "비밀번호가 누락되었습니다."),
     ACCOUNT_NOT_LOCKED(false, HttpStatus.BAD_REQUEST.value(), "계정이 잠금 상태가 아닙니다."),
+    LOCKED_USER(false,HttpStatus.BAD_REQUEST.value(), "휴면 계정입니다."),
 
     /**
      * 500 :  Database, Server 오류
