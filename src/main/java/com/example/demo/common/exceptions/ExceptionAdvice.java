@@ -60,13 +60,8 @@ public class ExceptionAdvice {
 
         logFailureWarning(errors, "Constraining violation");
 
-        boolean isUserIdError = errors.stream()
-            .anyMatch(error -> error.matches("(?i).*\\b(user_?id|userid)\\b.*"));
-
-        if (isUserIdError) {
-            return new BaseResponse<>(BaseResponseStatus.INVALID_TARGET_USER_ID);
-        }
-        return new BaseResponse<>(BaseResponseStatus.INVALID_REQUEST_PARAM);
+        BaseResponseStatus baseResponseStatus = specificValidationError(errors);
+        return new BaseResponse<>(baseResponseStatus);
     }
 
 
@@ -142,5 +137,25 @@ public class ExceptionAdvice {
         String input = msg + " failed ";
         String firstErr = errors.isEmpty() ? input : errors.get(0);
         log.warn(input + firstErr);
+    }
+
+    private BaseResponseStatus specificValidationError(List<String> errors) {
+        for (String error : errors) {
+            String lowerCase = error.toLowerCase();
+
+            if (lowerCase.matches(".*\\b(target_?user_?id|targetuserid)\\b.*")) {
+                if (lowerCase.contains("1 이상") || lowerCase.contains("must be greater")) {
+                    return BaseResponseStatus.INVALID_TARGET_USER_ID;
+                }
+                return BaseResponseStatus.INVALID_TARGET_USER_ID;
+            } else if (lowerCase.matches(".*\\b(target_?user_?id|targetuserid)\\b.*")) {
+                if (lowerCase.contains("너무 큽니다")) {
+                    return BaseResponseStatus.INVALID_TARGET_USER_ID;
+                }
+                return BaseResponseStatus.INVALID_TARGET_USER_ID;
+            }
+
+        }
+        return BaseResponseStatus.INVALID_REQUEST_PARAM;
     }
 }

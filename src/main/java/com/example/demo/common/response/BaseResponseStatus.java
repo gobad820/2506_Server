@@ -49,6 +49,7 @@ public enum BaseResponseStatus {
     AUDIT_DATA_NOT_FOUND(false, HttpStatus.NOT_FOUND.value(), "기록을 찾을 수 없습니다."),
     INVALID_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "올바르지 않을 이메일 형식입니다."),
     MISSING_PARAMETER(false, HttpStatus.BAD_REQUEST.value(), "필수 파라미터가 누락되었습니다."),
+    REVISION_ID_TOO_LARGE(false,HttpStatus.BAD_REQUEST.value(), "revision ID값이 너무 큽니다."),
 
     /**
      * 500 :  Database, Server 오류
