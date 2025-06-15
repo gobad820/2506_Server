@@ -8,6 +8,7 @@ import static com.example.demo.common.response.BaseResponseStatus.DATABASE_ERROR
 import static com.example.demo.common.response.BaseResponseStatus.DELETED_USER;
 import static com.example.demo.common.response.BaseResponseStatus.FAILED_TO_LOGIN;
 import static com.example.demo.common.response.BaseResponseStatus.INVALID_REQUEST_PARAM;
+import static com.example.demo.common.response.BaseResponseStatus.LOCKED_USER;
 import static com.example.demo.common.response.BaseResponseStatus.NOT_FIND_USER;
 import static com.example.demo.common.response.BaseResponseStatus.PASSWORD_ENCRYPTION_ERROR;
 import static com.example.demo.common.response.BaseResponseStatus.POST_USERS_EXISTS_EMAIL;
@@ -90,7 +91,7 @@ public class UserService {
             throw new BaseException(INVALID_REQUEST_PARAM);
         }
 
-        if (user.getEmail() != null || user.getEmail().trim().isEmpty()) {
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
             log.error("OAuth 사용자 이메일이 존재하지 않습니다.");
             throw new BaseException(USERS_EMPTY_EMAIL);
         }
@@ -215,6 +216,8 @@ public class UserService {
             } else {
                 throw new BaseException(DELETED_USER);
             }
+        } else if (user.getState() == LOCKED) {
+            throw new BaseException(LOCKED_USER);
         }
     }
 
