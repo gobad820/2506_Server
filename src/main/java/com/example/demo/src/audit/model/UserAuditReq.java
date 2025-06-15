@@ -1,4 +1,4 @@
-package com.example.demo.src.audit.dto;
+package com.example.demo.src.audit.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;

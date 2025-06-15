@@ -1,4 +1,4 @@
-package com.example.demo.src.audit.dto;
+package com.example.demo.src.audit.model;
 
 import com.example.demo.common.entity.BaseEntity.State;
 import com.example.demo.src.user.entity.User;
@@ -15,7 +15,7 @@ import org.hibernate.envers.RevisionType;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class UserAuditDto {
+public class UserAuditRes {
 
     private Long revision;
     private LocalDateTime revisionDateTime;
@@ -25,9 +25,9 @@ public class UserAuditDto {
     private String userEmail;
     private State userState;
 
-    public static UserAuditDto from(User user, Long revision, LocalDateTime revisionDateTime,
+    public static UserAuditRes from(User user, Long revision, LocalDateTime revisionDateTime,
         RevisionType revisionType) {
-        return UserAuditDto.builder()
+        return UserAuditRes.builder()
             .revision(revision)
             .revisionDateTime(revisionDateTime)
             .revisionType(revisionType)

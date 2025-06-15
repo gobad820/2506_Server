@@ -1,8 +1,8 @@
 package com.example.demo.src.audit;
 
 import com.example.demo.common.response.BaseResponse;
-import com.example.demo.src.audit.dto.UserAuditDto;
-import com.example.demo.src.audit.dto.UserAuditReq;
+import com.example.demo.src.audit.model.UserAuditRes;
+import com.example.demo.src.audit.model.UserAuditReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,9 +50,9 @@ public class AuditController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "조회 성공"),
         @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음"),
         @ApiResponse(responseCode = "403", description = "관리자 권한 필요")})
-    public BaseResponse<List<UserAuditDto>> getUserAudit(
+    public BaseResponse<List<UserAuditRes>> getUserAudit(
         @Parameter(description = "조회할 사용자 ID", required = true, example = "1") @PathVariable @Min(value = 1, message = "사용자 ID는 1 이상이어야 합니다.") Long userId) {
-        List<UserAuditDto> userAudit = auditService.getUserAudit(userId);
+        List<UserAuditRes> userAudit = auditService.getUserAudit(userId);
         return new BaseResponse<>(userAudit);
     }
 
@@ -71,11 +71,11 @@ public class AuditController {
         @ApiResponse(responseCode = "400", description = "잘못된 요청 파라미터 (BaseResponseStatus.INVALID_REQUEST_PARAM)"),
         @ApiResponse(responseCode = "401", description = "인증 실패 (BaseResponseStatus.INVALID_JWT)"),
         @ApiResponse(responseCode = "403", description = "관리자 권한 필요 (BaseResponseStatus.INVALID_USER_JWT)")})
-    public BaseResponse<Page<UserAuditDto>> getSystemAuditHistory(
+    public BaseResponse<Page<UserAuditRes>> getSystemAuditHistory(
         @ModelAttribute @Valid UserAuditReq request,
         @Parameter(description = "페이지 정보 (page, size, sort)") @PageableDefault(size = 10) Pageable pageable) {
         log.info(request.toString());
-        Page<UserAuditDto> auditHistory = auditService.getSystemAuditHistory(request, pageable);
+        Page<UserAuditRes> auditHistory = auditService.getSystemAuditHistory(request, pageable);
         return new BaseResponse<>(auditHistory);
     }
 
@@ -94,14 +94,14 @@ public class AuditController {
         @ApiResponse(responseCode = "404", description = "리비전을 찾을 수 없음 (BaseResponseStatus.AUDIT_DATA_NOT_FOUND)"),
         @ApiResponse(responseCode = "401", description = "인증 실패 (BaseResponseStatus.INVALID_JWT)"),
         @ApiResponse(responseCode = "403", description = "관리자 권한 필요 (BaseResponseStatus.INVALID_USER_JWT)")})
-    public BaseResponse<UserAuditDto> getRevisionDetail(
+    public BaseResponse<UserAuditRes> getRevisionDetail(
         @Parameter(description = "리비전 ID", required = true, example = "1")
         @PathVariable @Min(value = 1, message = "리비전 ID는 1 이상이어야 합니다.")
         @Max(value = Integer.MAX_VALUE, message = "리비전 ID 값이 너무 큽니다.")
         Long revisionId) {
         log.info("revision ID {}의 revision detail을 조회", revisionId);
         log.info("리비전 디테일 조회, revisionId: {}", revisionId);
-        UserAuditDto revisionDetail = auditService.getRevisionDetail(revisionId);
+        UserAuditRes revisionDetail = auditService.getRevisionDetail(revisionId);
         return new BaseResponse<>(revisionDetail);
     }
 }

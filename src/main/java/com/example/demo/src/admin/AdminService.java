@@ -1,5 +1,7 @@
 package com.example.demo.src.admin;
 
+import static com.example.demo.common.Constant.KOREA_ZONE;
+
 import com.example.demo.common.entity.BaseEntity.State;
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponseStatus;
@@ -27,7 +29,6 @@ public class AdminService {
 
     private final AdminDataManager adminDataManager;
     private final JwtService jwtService;
-    private static final ZoneId KOREA_ZONE = ZoneId.of("Asia/Seoul");
 
 
     public User getUserById(Long userId) {
