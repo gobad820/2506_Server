@@ -205,12 +205,12 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/consent")
-    public BaseResponse<String> updateUserContet(
-        @Valid @RequestBody UserConsentReq consetReq
+    public BaseResponse<String> updateUserConsent(
+        @Valid @RequestBody UserConsentReq consentReq
     ) {
         Long jwtUserId = jwtService.getUserId();
         log.info("개인정보 동의 : userId = {}", jwtUserId);
-        jwtService.updateUserConsent(jwtUserId, consetReq);
+        jwtService.updateUserConsent(jwtUserId, consentReq);
         return new BaseResponse<>("개인정보 동의 설정이 변경되었습니다.");
     }
 
