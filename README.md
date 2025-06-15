@@ -123,6 +123,7 @@ demo/
 │   │   │   ├── UserAuditReq.java
 │   │   │   └── UserAuditRes.java
 │   │   ├── AuditController.java
+│   │   ├── AuditDataManager.java
 │   │   └── AuditService.java
 │   ├── test/
 │   │   ├── entity/
@@ -172,7 +173,7 @@ demo/
 ```json
 {
   "isSuccess": true,
-  "code": 1000,
+  "code": 200,
   "message": "요청에 성공하였습니다.",
   "result": {
     "userId": 1,
@@ -190,7 +191,7 @@ result 필드는 null이며, JSON 응답에 포함되지 않습니다. 에러에
 JSON
 {
     "isSuccess": false,
-    "code": 2015,
+    "code": 400,
     "message": "중복된 이메일입니다."
 }
 ```
