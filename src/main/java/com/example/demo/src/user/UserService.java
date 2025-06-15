@@ -1,7 +1,8 @@
 package com.example.demo.src.user;
 
 
-import static com.example.demo.common.Constant.WITHDRAWL_GRACE_PERIOD_DAYS;
+import static com.example.demo.common.Constant.KOREA_ZONE;
+import static com.example.demo.common.Constant.WITHDRAWAL_GRACE_PERIOD_DAYS;
 import static com.example.demo.common.entity.BaseEntity.State.ACTIVE;
 import static com.example.demo.common.entity.BaseEntity.State.LOCKED;
 import static com.example.demo.common.response.BaseResponseStatus.ACCOUNT_NOT_LOCKED;
@@ -27,11 +28,9 @@ import com.example.demo.src.user.model.PostLoginReq;
 import com.example.demo.src.user.model.PostLoginRes;
 import com.example.demo.src.user.model.PostUserReq;
 import com.example.demo.src.user.model.PostUserRes;
-import com.example.demo.src.user.model.UserConsentReq;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -208,8 +207,7 @@ public class UserService {
 
     private static void validateUserState(User user) {
         if (user.getState() == State.INACTIVE) {
-            ZoneId KOREA_ZONE = ZoneId.of("Asia/Seoul");
-            boolean isPastGracePeriod = user.getUpdatedAt().plusDays(WITHDRAWL_GRACE_PERIOD_DAYS)
+            boolean isPastGracePeriod = user.getUpdatedAt().plusDays(WITHDRAWAL_GRACE_PERIOD_DAYS)
                 .isBefore(LocalDateTime.now(KOREA_ZONE));
             if (isPastGracePeriod) {
                 throw new BaseException(WITHDRAWN_USER);
