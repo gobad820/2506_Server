@@ -23,8 +23,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class ExceptionAdvice {
 
-     @ExceptionHandler(BaseException.class)
-    protected ResponseEntity<BaseResponse<BaseResponseStatus>> BaseExceptionHandle(
+    @ExceptionHandler(BaseException.class)
+    protected ResponseEntity<BaseResponse<Void>> BaseExceptionHandle(
         BaseException exception) {
         BaseResponseStatus status = exception.getStatus();
         if (status.getCode() >= 500) {
@@ -35,13 +35,13 @@ public class ExceptionAdvice {
             log.info("Business logic handled: {}", exception.getMessage());
         }
         HttpStatus httpStatus = HttpStatus.valueOf(status.getCode());
-        BaseResponse<BaseResponseStatus> response = new BaseResponse<>(status);
+        BaseResponse<Void> response = new BaseResponse<>(status);
         return new ResponseEntity<>(response, httpStatus);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public BaseResponse<BaseResponseStatus> handleMethodArgumentNotValidException(
+    public BaseResponse<Void> handleMethodArgumentNotValidException(
         MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
         List<String> errors = bindingResult.getFieldErrors().stream()
@@ -53,12 +53,12 @@ public class ExceptionAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public BaseResponse<BaseResponseStatus> handleConstraintViolationException(
+    public BaseResponse<Void> handleConstraintViolationException(
         ConstraintViolationException exception) {
         List<String> errors = exception.getConstraintViolations().stream()
             .map(v -> v.getPropertyPath() + ": " + v.getMessage()).collect(Collectors.toList());
 
-        logFailureWarning(errors, "Constraining violation");
+        logFailureWarning(errors, "Constraint violation");
 
         BaseResponseStatus baseResponseStatus = specificValidationError(errors);
         return new BaseResponse<>(baseResponseStatus);
@@ -67,7 +67,7 @@ public class ExceptionAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public BaseResponse<BaseResponseStatus> handleTypeMismatch(
+    public BaseResponse<Void> handleTypeMismatch(
         MethodArgumentTypeMismatchException exception) {
         log.warn(
             "Type conversion error: parameter '{}' with value '{}' could not be converted to type '{}'",
@@ -89,7 +89,7 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public BaseResponse<BaseResponseStatus> handleIllegalArgumentException(
+    public BaseResponse<Void> handleIllegalArgumentException(
         IllegalArgumentException exception) {
         log.warn("Illegal argument: {}", exception.getMessage());
         return new BaseResponse<>(BaseResponseStatus.INVALID_REQUEST_PARAM);
@@ -98,7 +98,7 @@ public class ExceptionAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(org.springframework.dao.DataAccessException.class)
-    public BaseResponse<BaseResponseStatus> handleDataAccessException(
+    public BaseResponse<Void> handleDataAccessException(
         org.springframework.dao.DataAccessException exception) {
         log.error("Database error occurred", exception);
         return new BaseResponse<>(BaseResponseStatus.DATABASE_ERROR);
@@ -111,14 +111,14 @@ public class ExceptionAdvice {
         MalformedJwtException.class,
         SignatureException.class,
     })
-    public BaseResponse<BaseResponseStatus> handleJwtException(Exception exception) {
+    public BaseResponse<Void> handleJwtException(Exception exception) {
         log.warn("JWT authentication failed: {}", exception.getMessage());
         return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(NullPointerException.class)
-    public BaseResponse<BaseResponseStatus> handleNullPointerException(
+    public BaseResponse<Void> handleNullPointerException(
         NullPointerException exception) {
         log.error("NullPointerException occurred", exception);
         return new BaseResponse<>(BaseResponseStatus.SERVER_ERROR);
@@ -127,8 +127,8 @@ public class ExceptionAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public BaseResponse<BaseResponseStatus> ExceptionHandle(Exception exception) {
-        log.error("Exception has occured. ", exception);
+    public BaseResponse<Void> handleException(Exception exception) {
+        log.error("Exception has occurred. ", exception);
         return new BaseResponse<>(BaseResponseStatus.UNEXPECTED_ERROR);
     }
 
@@ -146,15 +146,11 @@ public class ExceptionAdvice {
             if (lowerCase.matches(".*\\b(target_?user_?id|targetuserid)\\b.*")) {
                 if (lowerCase.contains("1 이상") || lowerCase.contains("must be greater")) {
                     return BaseResponseStatus.INVALID_TARGET_USER_ID;
-                }
-                return BaseResponseStatus.INVALID_TARGET_USER_ID;
-            } else if (lowerCase.matches(".*\\b(target_?user_?id|targetuserid)\\b.*")) {
-                if (lowerCase.contains("너무 큽니다")) {
+                } else if (lowerCase.contains("너무 큽니다")) {
                     return BaseResponseStatus.INVALID_TARGET_USER_ID;
                 }
                 return BaseResponseStatus.INVALID_TARGET_USER_ID;
             }
-
         }
         return BaseResponseStatus.INVALID_REQUEST_PARAM;
     }

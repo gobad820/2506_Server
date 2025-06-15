@@ -2,19 +2,20 @@ package com.example.demo.src.audit;
 
 import static com.example.demo.common.Constant.KOREA_ZONE;
 
+import com.example.demo.common.entity.BaseEntity.State;
 import com.example.demo.common.exceptions.BaseException;
 import com.example.demo.common.response.BaseResponseStatus;
-import com.example.demo.src.audit.model.UserAuditRes;
 import com.example.demo.src.audit.model.UserAuditReq;
+import com.example.demo.src.audit.model.UserAuditRes;
 import com.example.demo.src.user.entity.User;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
@@ -32,12 +33,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AuditService {
 
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private final AuditDataManager auditDataManager;
 
     /**
      * 특정 사용자의 감사 기록 조회
@@ -47,11 +51,14 @@ public class AuditService {
      * @throws BaseException 감사 시스템 오류 시
      */
     public List<UserAuditRes> getUserAudit(Long userId) {
+        User user = auditDataManager.getUserByIdAndState(userId,
+                State.ACTIVE)
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FIND_USER));
         try {
             AuditReader reader = AuditReaderFactory.get(entityManager);
             AuditQuery query = reader.createQuery()
                 .forRevisionsOfEntity(User.class, false, true)
-                .add(AuditEntity.id().eq(userId))
+                .add(AuditEntity.id().eq(user.getId()))
                 .addOrder(AuditEntity.revisionNumber().asc());
             @SuppressWarnings("unchecked")
             List<Object[]> resultList = query.getResultList();
@@ -84,6 +91,9 @@ public class AuditService {
      */
     public Page<UserAuditRes> getSystemAuditHistory(UserAuditReq request,
         Pageable pageable) {
+        auditDataManager.getUserByIdAndState(request.getTargetUserId(),
+                State.ACTIVE)
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FIND_USER));
         try {
             log.info("Request: {}", request);
 

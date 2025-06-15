@@ -16,6 +16,7 @@ import com.example.demo.src.user.model.PostUserReq;
 import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.src.user.model.UserConsentReq;
 import com.example.demo.utils.JwtService;
+import com.example.demo.utils.ValidationRegex;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -91,7 +92,7 @@ public class UserController {
     public BaseResponse<List<GetUserRes>> getUsers(
         @Parameter(description = "검색할 이메일 주소 (선택사항)")
         @RequestParam(required = false)
-        @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        @Pattern(regexp = ValidationRegex.regex,
             message = "이메일 형식이 올바르지 않습니다.")
         String email) {
         if (email == null) {
@@ -287,6 +288,8 @@ public class UserController {
         @RequestParam
         @Email(message = "유효한 이메일 형식이어야 합니다.")
         @NotBlank(message = "이메일은 필수값입니다.")
+        @Pattern(regexp = ValidationRegex.regex,
+            message = "이메일 형식이 올바르지 않습니다.")
         String email) {
         log.info("계정 잠금 해제 요청: email = {}", email);
         userService.requestAccountUnlock(email);
