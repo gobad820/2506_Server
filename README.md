@@ -73,7 +73,7 @@
 ![Image](https://github.com/user-attachments/assets/561af161-eea6-420c-ab36-e4309f916d51)
 
 > **※ `logs` 테이블에 대하여**: 위 ERD의 `logs` 테이블은 Hibernate Envers의 데이터 변경 이력과는 별개로, '사용자 로그인/로그아웃' 등 개발자가
-> 직접 정의한 특정 **행위(Event)**를 기록하기 위한 애플리케이션 로그 테이블입니다.
+> 직접 정의한 특정 행위(Event)를 기록하기 위한 애플리케이션 로그 테이블입니다.
 
 ### 로깅 상세 스키마
 
