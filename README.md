@@ -72,6 +72,21 @@
 
 ![Image](https://github.com/user-attachments/assets/561af161-eea6-420c-ab36-e4309f916d51)
 
+> **※ `logs` 테이블에 대하여**: 위 ERD의 `logs` 테이블은 Hibernate Envers의 데이터 변경 이력과는 별개로, '사용자 로그인/로그아웃' 등 개발자가
+> 직접 정의한 특정 **행위(Event)**를 기록하기 위한 애플리케이션 로그 테이블입니다.
+
+### 로깅 상세 스키마
+
+해당 프로젝트는 변경 이력을 추적하기 위해 **Hibernate Envers**를 사용합니다.
+`@Audited` 어노테이션이 붙은 엔티티에 대해 아래와 같은 감사 테이블들이 **자동으로 생성**됩니다.
+
+개발자가 직접 생성하는 것이 아니므로, 아래 다이어그램은 Envers가 내부적으로 어떻게 동작하는지 이해를 돕기 위한 참고용입니다.
+
+![Image](https://github.com/user-attachments/assets/0138595e-ec7c-439d-af75-c18edb491f24)
+
+- **REVINFO**: 모든 변경의 시점(Timestamp)과 고유 리비전 번호(REV)를 기록하는 마스터 테이블입니다.
+- **USER_AUD**: `users` 테이블의 데이터 변경 내역이 기록됩니다. 모든 감사 테이블은 `REVINFO`의 리비전 번호를 참조하여 변경 시점을 추적합니다.
+
 ## ⦿ 프로젝트 구조
 
 ```
